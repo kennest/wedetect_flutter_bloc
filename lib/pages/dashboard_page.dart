@@ -17,9 +17,7 @@ class _DashBoardPageState extends State<DashBoardPage> {
   AlertRepository alertRepository;
   List<Alert> alerts = [];
   ScrollController _scrollcontroller = new ScrollController();
-Icon _searchIcon = new Icon(Icons.search); 
-
-
+  Icon _searchIcon = new Icon(Icons.search);
 
   @override
   void initState() {
@@ -44,15 +42,7 @@ Icon _searchIcon = new Icon(Icons.search);
     return BlocProvider<LoginBloc>(
       bloc: loginBloc,
       child: Scaffold(
-        appBar: AppBar(
-            title: Text('WeDetect'),
-            actions: <Widget>[
-              IconButton(
-                icon: _searchIcon,
-                onPressed: (){},
-              )
-            ],
-        ),
+       
         drawer: new Drawer(
           child: Container(
             child: Padding(
@@ -79,7 +69,10 @@ Icon _searchIcon = new Icon(Icons.search);
                     minWidth: 250.0,
                     color: Colors.blue,
                     elevation: 15.0,
-                    child: Text('Logout',style: TextStyle(color: Colors.white),),
+                    child: Text(
+                      'Logout',
+                      style: TextStyle(color: Colors.white),
+                    ),
                     onPressed: () {
                       loginBloc.dispatch(LogoutButtonPressed());
                     },
@@ -89,7 +82,22 @@ Icon _searchIcon = new Icon(Icons.search);
             ),
           ),
         ),
-        body: listAlerts(),
+        body: CustomScrollView(
+          slivers: <Widget>[
+            SliverAppBar(
+              expandedHeight: 200.0,
+              floating: false,
+              pinned: true,
+              flexibleSpace: FlexibleSpaceBar(
+                background:Image.network('https://wallpapershome.com/images/pages/pic_h/1160.jpg',fit: BoxFit.cover),
+                title: Text('Alerts List'),
+              ),
+            ),
+            SliverFillRemaining(
+              child: listAlerts(),
+            )
+          ],
+        ),
         floatingActionButton: new FloatingActionButton(
           onPressed: () => exit(0),
           tooltip: 'Close app',
@@ -101,36 +109,62 @@ Icon _searchIcon = new Icon(Icons.search);
 
   Widget listAlerts() {
     return StreamBuilder(
-            initialData: alerts,
-            stream: alertRepository.next == null
-                ? alertRepository.getAlerts().asStream()
-                : alertRepository.getAlerts(url: alertRepository.next).asStream(),
-            builder: (BuildContext context, AsyncSnapshot snapshot) {
-              if (snapshot.data != null) {
-                return ListView.builder(
-                    itemExtent: 100.0,
-                    itemCount: snapshot.data.length,
-                    controller: _scrollcontroller,
-                    itemBuilder: (BuildContext ctx, int index) {
-                      return ListTile(
-                        leading: Icon(Icons.alarm),
-                        title: Text(snapshot.data[index].title),
-                        subtitle: Text(snapshot.data[index].contenu),
-                        onTap: () {},
+        initialData: alerts,
+        stream: alertRepository.next == null
+            ? alertRepository.getAlerts().asStream()
+            : alertRepository.getAlerts(url: alertRepository.next).asStream(),
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          if (snapshot.data != null) {
+            return ListView.builder(
+                itemExtent: 100.0,
+                itemCount: snapshot.data.length,
+                controller: _scrollcontroller,
+                itemBuilder: (BuildContext ctx, int index) {
+                  return ListTile(
+                    leading: Icon(Icons.alarm),
+                    title: Text(snapshot.data[index].title),
+                    subtitle: Text(snapshot.data[index].contenu),
+                    onTap: () {
+                      return showDialog<void>(
+                        context: context,
+                        barrierDismissible: false, // user must tap button!
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text(snapshot.data[index].title),
+                            content: SingleChildScrollView(
+                              child: ListBody(
+                                children: <Widget>[
+                                  Text(snapshot.data[index].contenu),
+                                ],
+                              ),
+                            ),
+                            actions: <Widget>[
+                              FlatButton(
+                                child: Text('Close'),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
+                          );
+                        },
                       );
-                    });
-              } else {
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-            });
-
+                    },
+                  );
+                });
+          } else {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        });
   }
 
   @override
   void dispose() {
     _scrollcontroller.dispose();
+    loginBloc.dispose();
+    authenticationBloc.dispose();
     super.dispose();
   }
 }
