@@ -1,15 +1,14 @@
-import 'package:scoped_model/scoped_model.dart';
+import 'package:wedetect/models/category.dart';
 
-class Alert extends Model {
+class Alert {
   String title = "Un titre...";
-  String contenu = "";
+  String content = "";
+  String dateCreation="";
+  Category category;
   Alert();
   Alert.fromJson(Map<String, dynamic> json)
       : title = json['titre'],
-        contenu = json['contenu'];
-
-  void changeTitle(String title) {
-    this.title = title;
-    notifyListeners();
-  }
+        content = json['contenu'],
+        dateCreation=json['date_de_creation'],
+        category=Category.fromJson(json['categorie']);
 }

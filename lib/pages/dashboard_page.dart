@@ -42,7 +42,6 @@ class _DashBoardPageState extends State<DashBoardPage> {
     return BlocProvider<LoginBloc>(
       bloc: loginBloc,
       child: Scaffold(
-       
         drawer: new Drawer(
           child: Container(
             child: Padding(
@@ -89,7 +88,7 @@ class _DashBoardPageState extends State<DashBoardPage> {
               floating: false,
               pinned: true,
               flexibleSpace: FlexibleSpaceBar(
-                background:Image.network('https://wallpapershome.com/images/pages/pic_h/1160.jpg',fit: BoxFit.cover),
+                background:Image.network('https://wallpapershome.com/images/pages/pic_h/1160.jpg',fit: BoxFit.cover,),
                 title: Text('Alerts List'),
               ),
             ),
@@ -108,22 +107,22 @@ class _DashBoardPageState extends State<DashBoardPage> {
   }
 
   Widget listAlerts() {
-    return StreamBuilder(
+    return new StreamBuilder(
         initialData: alerts,
         stream: alertRepository.next == null
             ? alertRepository.getAlerts().asStream()
             : alertRepository.getAlerts(url: alertRepository.next).asStream(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.data != null) {
-            return ListView.builder(
+            return new ListView.builder(
                 itemExtent: 100.0,
                 itemCount: snapshot.data.length,
                 controller: _scrollcontroller,
                 itemBuilder: (BuildContext ctx, int index) {
-                  return ListTile(
-                    leading: Icon(Icons.alarm),
-                    title: Text(snapshot.data[index].title),
-                    subtitle: Text(snapshot.data[index].contenu),
+                  return new ListTile(
+                    leading:Image.network(snapshot.data[index].category.icone),
+                    title: Text(snapshot.data[index].title,style: TextStyle(color: Colors.green,fontWeight: FontWeight.bold),),
+                    subtitle: Text(snapshot.data[index].content),
                     onTap: () {
                       return showDialog<void>(
                         context: context,
@@ -134,7 +133,8 @@ class _DashBoardPageState extends State<DashBoardPage> {
                             content: SingleChildScrollView(
                               child: ListBody(
                                 children: <Widget>[
-                                  Text(snapshot.data[index].contenu),
+                                  Image.network(snapshot.data[index].category.icone),
+                                  Text(snapshot.data[index].content),
                                 ],
                               ),
                             ),
@@ -153,7 +153,7 @@ class _DashBoardPageState extends State<DashBoardPage> {
                   );
                 });
           } else {
-            return Center(
+            return new Center(
               child: CircularProgressIndicator(),
             );
           }
