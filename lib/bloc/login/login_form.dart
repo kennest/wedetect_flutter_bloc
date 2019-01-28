@@ -117,13 +117,6 @@ class LoginFormState extends State<LoginForm> {
     });
   }
 
-  _onLoginButtonPressed() {
-    widget.loginBloc.dispatch(LoginButtonPressed(
-      username: _usernameController.text,
-      password: _passwordController.text,
-    ));
-  }
-
   @override
     void dispose() {
       widget.loginBloc.dispose();

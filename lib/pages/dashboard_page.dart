@@ -4,8 +4,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wedetect/bloc/authentication/authentication.dart';
 import 'package:wedetect/bloc/login/login.dart';
 import 'package:wedetect/models/alert.dart';
+import 'package:wedetect/pages/alert_details.dart';
 import 'package:wedetect/repository/alert_repository.dart';
 import 'package:wedetect/repository/user_repository.dart';
+import 'picture_page.dart';
 
 class DashBoardPage extends StatefulWidget {
   _DashBoardPageState createState() => _DashBoardPageState();
@@ -51,6 +53,16 @@ class _DashBoardPageState extends State<DashBoardPage> {
                 children: <Widget>[
                   ListTile(
                     leading: Icon(Icons.account_box),
+                    title: Text("Camera"),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => PicturePage()),
+                      );
+                    },
+                  ),
+                  ListTile(
+                    leading: Icon(Icons.account_box),
                     title: Text("Profil"),
                     onTap: () {},
                   ),
@@ -88,7 +100,10 @@ class _DashBoardPageState extends State<DashBoardPage> {
               floating: false,
               pinned: true,
               flexibleSpace: FlexibleSpaceBar(
-                background:Image.network('https://wallpapershome.com/images/pages/pic_h/1160.jpg',fit: BoxFit.cover,),
+                background: Image.network(
+                  'https://wallpapershome.com/images/pages/pic_h/1160.jpg',
+                  fit: BoxFit.cover,
+                ),
                 title: Text('Alerts List'),
               ),
             ),
@@ -120,34 +135,19 @@ class _DashBoardPageState extends State<DashBoardPage> {
                 controller: _scrollcontroller,
                 itemBuilder: (BuildContext ctx, int index) {
                   return new ListTile(
-                    leading:Image.network(snapshot.data[index].category.icone),
-                    title: Text(snapshot.data[index].title,style: TextStyle(color: Colors.green,fontWeight: FontWeight.bold),),
+                    leading: Image.network(snapshot.data[index].category.icone),
+                    title: Text(
+                      snapshot.data[index].title,
+                      style: TextStyle(
+                          color: Colors.green, fontWeight: FontWeight.bold),
+                    ),
                     subtitle: Text(snapshot.data[index].content),
                     onTap: () {
-                      return showDialog<void>(
-                        context: context,
-                        barrierDismissible: false, // user must tap button!
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: Text(snapshot.data[index].title),
-                            content: SingleChildScrollView(
-                              child: ListBody(
-                                children: <Widget>[
-                                  Image.network(snapshot.data[index].category.icone),
-                                  Text(snapshot.data[index].content),
-                                ],
-                              ),
-                            ),
-                            actions: <Widget>[
-                              FlatButton(
-                                child: Text('Close'),
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                              ),
-                            ],
-                          );
-                        },
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                AlertDetailsPage(alert: snapshot.data[index])),
                       );
                     },
                   );

@@ -1,19 +1,19 @@
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
-import 'package:wedetect/models/alert.dart';
 import 'package:wedetect/repository/repository.dart';
 
-class AlertBloc extends Bloc<String, List<Alert>> {
+class DataBloc extends Bloc<String, List<dynamic>> {
   final AlertRepository alertRepository;
   final UserRepository userRepository;
+  final DiagnosticRepository diagnosticRepository;
 
-  AlertBloc({@required this.alertRepository, this.userRepository});
+  DataBloc({ this.alertRepository,@required this.userRepository,this.diagnosticRepository});
   @override
-  List<Alert> get initialState => [];
+  List<dynamic> get initialState => [];
 
   @override
-  Stream<List<Alert>> mapEventToState(
-      List<Alert> currentState, String event) async* {
+  Stream<List<dynamic>> mapEventToState(
+      List<dynamic> currentState, String event) async* {
     if (event == 'load_alerts') {
       await alertRepository.getAlerts();
       yield alertRepository.alerts;
