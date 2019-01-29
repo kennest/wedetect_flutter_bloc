@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:wedetect/bloc/authentication/authentication.dart';
 import 'package:wedetect/bloc/login/login.dart';
 import 'package:wedetect/models/alert.dart';
@@ -109,7 +110,7 @@ class _DashBoardPageState extends State<DashBoardPage> {
             ),
             SliverFillRemaining(
               child: listAlerts(),
-            )
+            ),
           ],
         ),
         floatingActionButton: new FloatingActionButton(
