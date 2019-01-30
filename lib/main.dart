@@ -5,6 +5,8 @@ import 'package:wedetect/bloc/login/login_page.dart';
 import 'package:wedetect/pages/dashboard_page.dart';
 import 'package:wedetect/repository/user_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'localization.dart';
 
 class SimpleBlocDelegate extends BlocDelegate {
   @override
@@ -49,6 +51,14 @@ class AppState extends State<App> {
     return BlocProvider<AuthenticationBloc>(
       bloc: _authenticationBloc,
       child: MaterialApp(
+        localizationsDelegates: [
+          AppLocalizationsDelegate(),
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate
+        ],
+        supportedLocales: [Locale("en"), Locale("fr")],
+        onGenerateTitle: (BuildContext context) =>
+            AppLocalizations.of(context).title,
         theme: ThemeData.light(),
         debugShowCheckedModeBanner: false,
         home: BlocBuilder<AuthenticationEvent, AuthenticationState>(
@@ -64,13 +74,10 @@ class AppState extends State<App> {
             }
             if (state is Loading || state is Uninitialized) {
               return Container(
-                decoration: BoxDecoration(
-                  color: Colors.white
-                ),
+                  decoration: BoxDecoration(color: Colors.white),
                   child: Center(
                     child: CircularProgressIndicator(),
-                  )
-                );
+                  ));
             }
           },
         ),

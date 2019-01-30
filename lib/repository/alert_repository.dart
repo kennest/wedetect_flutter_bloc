@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:wedetect/models/alert.dart';
 import 'package:wedetect/models/category.dart';
 import 'package:wedetect/models/piece.dart';
+import 'package:wedetect/models/receiver.dart';
 import 'package:wedetect/repository/user_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -36,12 +37,20 @@ class AlertRepository {
             print(n['properties']['categorie']);
             Category c = Category.fromJson(n['properties']['categorie']);
 
+            //Get Receivers from json
+            List<Receiver> receivers = new List();
+            var receiverFromJson = n['properties']['destinataires'] as List;
+            receivers =
+                receiverFromJson.map((f) => Receiver.fromJson(f)).toList();
+            a.receivers = receivers;
+            print('Size receivers:${receivers.length}');
+
             //Get Pieces from json
             List<Piece> pieces = new List();
             var piecesFromJson = n['properties']['piece_join_alerte'] as List;
             pieces =
                 piecesFromJson.map<Piece>((g) => Piece.fromJson(g)).toList();
-            print('Size:${pieces.length}');
+            print('Size pieces :${pieces.length}');
             a.pieces = pieces;
             a.category = c;
             alerts.add(a);

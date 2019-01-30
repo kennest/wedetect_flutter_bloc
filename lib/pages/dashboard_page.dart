@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:wedetect/bloc/authentication/authentication.dart';
 import 'package:wedetect/bloc/login/login.dart';
+import 'package:wedetect/localization.dart';
 import 'package:wedetect/models/alert.dart';
 import 'package:wedetect/pages/alert_details.dart';
 import 'package:wedetect/repository/alert_repository.dart';
@@ -52,6 +53,7 @@ class _DashBoardPageState extends State<DashBoardPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
+                  Text(AppLocalizations.of(context).title),
                   ListTile(
                     leading: Icon(Icons.account_box),
                     title: Text("Camera"),
@@ -113,7 +115,7 @@ class _DashBoardPageState extends State<DashBoardPage> {
             ),
           ],
         ),
-        floatingActionButton: new FloatingActionButton(
+        floatingActionButton: new FloatingActionButton( 
           onPressed: () => exit(0),
           tooltip: 'Close app',
           child: new Icon(Icons.close),
@@ -132,9 +134,10 @@ class _DashBoardPageState extends State<DashBoardPage> {
           if (snapshot.data != null) {
             return new ListView.builder(
                 itemExtent: 100.0,
+                physics: const AlwaysScrollableScrollPhysics(),
                 itemCount: snapshot.data.length,
                 controller: _scrollcontroller,
-                itemBuilder: (BuildContext ctx, int index) {
+                itemBuilder: (BuildContext ctx, int index) { 
                   return new ListTile(
                     leading: Image.network(snapshot.data[index].category.icone),
                     title: Text(

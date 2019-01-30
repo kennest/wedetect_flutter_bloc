@@ -1,0 +1,14 @@
+{
+  "@@last_modified": "2019-01-30T10:42:16.465812",
+  "title": "Wedetect",
+  "@title": {
+    "description": "The application title",
+    "type": "text",
+    "placeholders": {}
+  },
+  "hello": "Hello",
+  "@hello": {
+    "type": "text",
+    "placeholders": {}
+  }
+}
